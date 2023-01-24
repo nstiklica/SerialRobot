@@ -2,7 +2,7 @@
 
 int Axis::Init(int pinNumber, int stepDelay, int startPosition, int minAngle, int maxAngle)
 {
-    m_servo.attach(pinNumber);
+    m_servo.Init(pinNumber);
     m_stepDelay = stepDelay;
     m_startPosition = startPosition;
     m_minAngle = minAngle;

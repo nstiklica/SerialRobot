@@ -24,6 +24,6 @@ public:
     void SetAngle(int angle);
     void SetStep(int step);
     void Move();
-}
+};
 
 #endif
