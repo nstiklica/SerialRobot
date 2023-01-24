@@ -1,9 +1,9 @@
 #include <StaticThreadController.h>
 #include <Thread.h>
-#include <Servo.h>
+#include "MyServo.h"
 
-Servo m_servo;
-Servo m_servo2;
+MyServo m_servo1;
+MyServo m_servo2;
 Thread m_syncThread;
 Thread m_axisThread1;
 Thread m_axisThread2;
@@ -19,18 +19,22 @@ void setup()
   m_axisThread1 = Thread();
   m_axisThread2 = Thread();
 
-  m_servo.attach(5);
-  m_servo.write(0);
-
-  m_servo2.attach(3);
-  m_servo2.write(0);
-
+  ConfigureServos();
   ConfigureThreads();
 }
 
 void loop()
 {
   controller.run();
+}
+
+void ConfigureServos()
+{
+  m_servo1.Init(5);
+  m_servo1.SetPosition(0);
+
+  m_servo2.Init(3);
+  m_servo2.SetPosition(0);
 }
 
 void ConfigureThreads()
@@ -48,30 +52,33 @@ void ConfigureThreads()
   m_syncThread.onRun(SyncFunction);
 }
 
-void MoveServo1(){
-  MoveServo(m_servo);
+void MoveServo1()
+{
+  MoveServo(m_servo1);
 }
 
-void MoveServo2(){
+void MoveServo2()
+{
   MoveServo(m_servo2);
 }
 
-void MoveServo(Servo servo){
-    int currentPosition = servo.read();
+void MoveServo(MyServo servo)
+{
+  int currentPosition = servo.GetPosition();
   if (currentPosition == m_axis1_finalAngle)
   {
     return;
   }
   else if (currentPosition < m_axis1_finalAngle)
   {
-  //  Serial.println("Increment");
+    //  Serial.println("Increment");
     currentPosition++;
-    servo.write(currentPosition);
+    servo.SetPosition(currentPosition);
   }
   else if (currentPosition > m_axis1_finalAngle)
   {
     currentPosition--;
-    servo.write(currentPosition);
+    servo.SetPosition(currentPosition);
   }
 }
 
